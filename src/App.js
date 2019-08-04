@@ -1,10 +1,10 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-import ListScreen from './screens/ListScreen/ListScreen';
+import ListScreenWireframe from './screens/ListScreen/ListScreenWireframe';
 
 const AppNavigator = createStackNavigator({
-  Home: {
-    screen: ListScreen,
+  List: {
+    screen: ListScreenWireframe,
   },
 });
 
