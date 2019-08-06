@@ -1,0 +1,6 @@
+# Things to fix afterwards
+
+Issues:
+  ☐ Fix device rotation support (list width shouldn't be static)
+  ☐ Add activity indicator while picking image from library
+
