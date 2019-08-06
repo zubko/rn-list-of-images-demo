@@ -7,10 +7,6 @@ import ImageListItem, { heightForItem } from './ImageListItem';
 
 const SCREEN = Dimensions.get('screen');
 const COMPONENT_WIDTH = SCREEN.width;
-const VIEWABILITY_CONFIG = {
-  minimumViewTime: 50,
-  viewAreaCoveragePercentThreshold: 5,
-};
 
 export default ({ data, lastOperation, style, ...otherProps }) => {
   const listRef = React.useRef();
@@ -38,7 +34,9 @@ export default ({ data, lastOperation, style, ...otherProps }) => {
       ItemSeparatorComponent={ImageListSeparator}
       getItemLayout={getItemLayout}
       style={[listStyle, style]}
-      viewabilityConfig={VIEWABILITY_CONFIG}
+      initialNumToRender={4}
+      maxToRenderPerBatch={1}
+      windowSize={5}
       {...otherProps}
     />
   );
@@ -53,7 +51,7 @@ export function useGetItemLayout({ data, componentWidth, lastOperation }) {
         separatorHeight: ImageListSeparator.HEIGHT,
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, lastOperation]
+    [data, lastOperation, componentWidth]
   );
 
   return React.useCallback((_, index) => heights[index], [heights]);

@@ -1,16 +1,33 @@
 import { observable } from 'mobx';
 
-import * as ImagePickerService from '../../services/ImagePickerService';
+import ImagePickerService from '../../services/ImagePickerService';
 
 function createListScreenController(imageListStore) {
-  const imageList = imageListStore.getObservableImageList();
-
   const viewModel = observable.object({
-    list: imageList,
+    list: null,
     lastOperation: null,
   });
+  let observeDisposer = null;
 
-  let observeDisposer = imageList.observe(({ type, index, removed, added }) => {
+  init();
+
+  async function init() {
+    await imageListStore.init();
+    observeImageList();
+  }
+
+  function observeImageList() {
+    const imageList = imageListStore.getObservableImageList();
+    observeDisposer = imageList.observe(imageListDidChange);
+    viewModel.list = imageList;
+  }
+
+  function dispose() {
+    observeDisposer && observeDisposer();
+    observeDisposer = null;
+  }
+
+  function imageListDidChange({ type, index, removed, added }) {
     if (type === 'splice') {
       if (added.length > 0) {
         viewModel.lastOperation = {
@@ -26,22 +43,18 @@ function createListScreenController(imageListStore) {
         };
       }
     }
-  });
-
-  function dispose() {
-    observeDisposer && observeDisposer();
-    observeDisposer = null;
   }
 
   async function onAddImagePress() {
     const item = await ImagePickerService.pickImage();
-    if (item) {
-      imageListStore.addImage({
-        path: item.path,
-        width: item.width,
-        height: item.height,
-      });
+    if (!item) {
+      return;
     }
+    await imageListStore.addImage({
+      path: item.path,
+      width: item.width,
+      height: item.height,
+    });
   }
 
   return {

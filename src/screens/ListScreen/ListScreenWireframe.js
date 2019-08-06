@@ -1,6 +1,6 @@
 import React from 'react';
 
-import InMemoryImageListStore from '../../store/InMemoryImageListStore';
+import ImageListStore from '../../store/ImageListStore';
 import createListScreenController from './ListScreenController';
 
 import ListScreenView from './ListScreenView';
@@ -8,7 +8,7 @@ import ListScreenNavigationOptions from './ListScreenNavigationOptions';
 
 const ListScreenWireframe = ({ navigation }) => {
   const [controller] = React.useState(() =>
-    createListScreenController(InMemoryImageListStore)
+    createListScreenController(ImageListStore)
   );
   React.useEffect(() => {
     navigation.setParams({ controller });
